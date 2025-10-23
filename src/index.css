@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-body bg-gray-50 text-gray-900;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+}
+@layer components {
+  .btn-primary {
+    @apply bg-midnights-purple hover:bg-midnights-blue text-white 
+    font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-midnights-purple border-2 
+    border-midnights-purple font-semibold py-2 px-6 rounded-lg transition-all duration-200;
+  }
+  .btn-danger {
+    @apply bg-red-classic hover:bg-red-700 text-white font-semibold 
+    py-2 px-4 rounded-lg transition-all duration-200;
+  }
+  .input-field {
+    @apply w-full px-4 py-2 border-2 border-gray-300 rounded-lg 
+    focus:outline-none focus:border-midnights-purple transition-colors;
+  }
+
+  .product-card {
+    @apply bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden;
+  }
+}
