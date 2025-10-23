@@ -128,7 +128,7 @@ export default function Footer() {
           <p className="flex items-center justify-center space-x-1">
             <span>Hecho con</span>
             <Heart size={16} className="text-red-500 fill-current" />
-            <span>por Swifties para Swifties © 2024</span>
+            <span>por Swifties para Swifties © 2025</span>
           </p>
         </div>
       </div>

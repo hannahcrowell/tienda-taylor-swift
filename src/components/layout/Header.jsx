@@ -2,6 +2,7 @@ import { ShoppingCart, User, LogOut, Menu, Music } from "lucide-react";
 import { useState } from "react";
 import { useAuthStore } from "../../store/authStore";
 import { useCartStore } from "../../store/cartStore";
+import logoImage from "../../assets/taytay.jpg"; // Import your image
 
 export default function Header() {
   const { user, profile, signOut } = useAuthStore();
@@ -19,12 +20,11 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="/" className="flex items-center space-x-2">
-            <Music className="text-midnights-purple" size={32} />
+            <img src={logoImage} alt="Logo" className="h-8 w-auto" />{" "}
+            {/* Add your image here */}
             <div>
-              <h1 className="text-xl font-display text-midnights-purple">
-                Taylor Swift
-              </h1>
-              <p className="text-xs text-gray-500">Official Store</p>
+              <h1 className=" text-midnights-purple">Taylor Swift</h1>
+              <p className="text-xs text-gray-500">Tienda Oficial</p>
             </div>
           </a>
 
