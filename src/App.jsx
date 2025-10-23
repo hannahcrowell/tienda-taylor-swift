@@ -1,65 +1,128 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuthStore } from "./store/authStore";
+import { useCartStore } from "./store/cartStore";
+
+// Pages
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Profile from "./pages/Profile";
+import Orders from "./pages/Orders";
+
+// Admin Pages
+import Dashboard from "./pages/admin/Dashboard";
+import ProductsAdmin from "./pages/admin/ProductsAdmin";
+import CategoriesAdmin from "./pages/admin/CategoriesAdmin";
+import OrdersAdmin from "./pages/admin/OrdersAdmin";
+
+// Protected Route
+import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminRoute from "./routes/AdminRoute";
+
+// Loading
+import Loading from "./components/common/Loading";
+
 function App() {
+  const { initialize, loading, user } = useAuthStore();
+  const { loadFromSupabase } = useCartStore();
+
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      loadFromSupabase(user.id);
+    }
+  }, [user]);
+
+  if (loading) {
+    return <Loading fullScreen />;
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-lover-pink via-the-tortured-poets-department to-1989-blue flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-display text-midnights-purple mb-2">
-            Taylor Swift
-          </h1>
-          <h2 className="text-xl text-the-tortured-poets-department">
-            Tienda Oficial
-          </h2>
-        </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-        <div className="space-y-3">
-          <button className="btn-primary w-full">💜 Explorar Productos</button>
-          <button className="btn-secondary w-full">✨ Crear Cuenta</button>
-          <button className="btn-danger w-full">🗑️ Eliminar</button>
-        </div>
+        {/* Protected Routes */}
+        <Route
+          path="/carrito"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/perfil"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ordenes"
+          element={
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
 
-        <div className="mt-6">
-          <input
-            type="text"
-            placeholder="Buscar productos de Taylor..."
-            className="input-field"
-          />
-        </div>
+        {/* Admin Routes */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <Dashboard />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/productos"
+          element={
+            <AdminRoute>
+              <ProductsAdmin />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/categorias"
+          element={
+            <AdminRoute>
+              <CategoriesAdmin />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/ordenes"
+          element={
+            <AdminRoute>
+              <OrdersAdmin />
+            </AdminRoute>
+          }
+        />
 
-        <div className="grid gap-3 mt-6">
-          <div className="product-card p-4 border-l-4 border-midnights-purple">
-            <h3 className="font-semibold text-lg text-midnights-purple">
-              Midnights Vinyl
-            </h3>
-            <p className="text-gray-600 text-sm">Edición Moonstone Blue</p>
-            <p className="text-midnights-purple font-bold text-xl mt-2">
-              $899 MXN
-            </p>
-          </div>
-
-          <div className="product-card p-4 border-l-4 border-the-tortured-poets-department">
-            <h3 className="font-semibold text-lg text-the-tortured-poets-department">
-              TTPD Cardigan
-            </h3>
-            <p className="text-gray-600 text-sm">
-              The Tortured Poets Department
-            </p>
-            <p className="text-the-tortured-poets-department font-bold text-xl mt-2">
-              $1,899 MXN
-            </p>
-          </div>
-
-          <div className="product-card p-4 border-l-4 border-red-classic">
-            <h3 className="font-semibold text-lg text-red-classic">
-              Red Scarf
-            </h3>
-            <p className="text-gray-600 text-sm">
-              All Too Well (10 Minute Version)
-            </p>
-            <p className="text-red-classic font-bold text-xl mt-2">$349 MXN</p>
-          </div>
-        </div>
-      </div>
-    </div>
+        {/* Catch all - 404 */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

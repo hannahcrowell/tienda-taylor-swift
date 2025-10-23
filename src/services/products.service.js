@@ -1,7 +1,6 @@
 import { supabase } from "./supabase";
 
 export const productsService = {
-  // Obtener todos los productos activos
   async getProducts(filters = {}) {
     try {
       let query = supabase
@@ -19,12 +18,10 @@ export const productsService = {
         .eq("esta_activo", true)
         .order("fecha_creacion", { ascending: false });
 
-      // Filtrar por categoría
       if (filters.categoria_id) {
         query = query.eq("categoria_id", filters.categoria_id);
       }
 
-      // Búsqueda por nombre
       if (filters.busqueda) {
         query = query.ilike("nombre", `%${filters.busqueda}%`);
       }
@@ -33,14 +30,21 @@ export const productsService = {
 
       if (error) throw error;
 
-      return { success: true, productos: data || [] };
+      // Mapear inventario → stock y url_imagen → imagen_url
+      const productos =
+        data?.map((p) => ({
+          ...p,
+          stock: p.inventario,
+          imagen_url: p.url_imagen,
+        })) || [];
+
+      return { success: true, productos };
     } catch (error) {
       console.error("Error al obtener productos:", error);
       return { success: false, error: error.message, productos: [] };
     }
   },
 
-  // Obtener un producto por slug
   async getProductBySlug(slug) {
     try {
       const { data, error } = await supabase
@@ -61,14 +65,20 @@ export const productsService = {
 
       if (error) throw error;
 
-      return { success: true, producto: data };
+      // Mapear campos
+      const producto = {
+        ...data,
+        stock: data.inventario,
+        imagen_url: data.url_imagen,
+      };
+
+      return { success: true, producto };
     } catch (error) {
       console.error("Error al obtener producto:", error);
       return { success: false, error: error.message };
     }
   },
 
-  // Obtener categorías
   async getCategories() {
     try {
       const { data, error } = await supabase
