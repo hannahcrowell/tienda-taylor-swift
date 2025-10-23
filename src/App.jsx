@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useAuthStore } from "./store/authStore";
 import { useCartStore } from "./store/cartStore";
 
-// Pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -12,13 +11,13 @@ import Checkout from "./pages/Checkout";
 import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
 
-// Admin Pages
+// Paginas de Admin
 import Dashboard from "./pages/admin/Dashboard";
 import ProductsAdmin from "./pages/admin/ProductsAdmin";
 import CategoriesAdmin from "./pages/admin/CategoriesAdmin";
 import OrdersAdmin from "./pages/admin/OrdersAdmin";
 
-// Protected Route
+// Protector de Rutas
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
 
@@ -46,12 +45,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
+        {/* Estas son rutas publicas*/}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes */}
+        {/* Rutas Protegidas */}
         <Route
           path="/carrito"
           element={

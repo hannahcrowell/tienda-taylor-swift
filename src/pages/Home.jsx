@@ -43,7 +43,7 @@ export default function Home() {
       <section className="bg-gradient-to-r from-midnights-purple via-midnights-blue to-1989-blue text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl md:text-6xl font-display mb-4">
-            🎵 Taylor Swift Official Store
+            🎵 Taylor Swift Tienda Oficial
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-white/90">
             Encuentra todo el merch oficial de Taylor Swift
