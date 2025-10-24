@@ -2,7 +2,6 @@ import { supabase } from "./supabase";
 
 export const adminService = {
   // ============ PRODUCTOS ============
-
   async createProduct(productData) {
     try {
       const { data, error } = await supabase
@@ -13,8 +12,8 @@ export const adminService = {
             slug: productData.slug,
             descripcion: productData.descripcion,
             precio: productData.precio,
-            inventario: productData.stock, // stock → inventario
-            url_imagen: productData.imagen_url, // imagen_url → url_imagen
+            inventario: productData.stock,
+            url_imagen: productData.imagen_url,
             categoria_id: productData.categoria_id,
             esta_activo: productData.esta_activo,
           },
@@ -37,8 +36,8 @@ export const adminService = {
         slug: updates.slug,
         descripcion: updates.descripcion,
         precio: updates.precio,
-        inventario: updates.stock, // stock → inventario
-        url_imagen: updates.imagen_url, // imagen_url → url_imagen
+        inventario: updates.stock,
+        url_imagen: updates.imagen_url,
         categoria_id: updates.categoria_id,
         esta_activo: updates.esta_activo,
       };
@@ -91,12 +90,11 @@ export const adminService = {
 
       if (error) throw error;
 
-      // Mapear los datos para que coincidan con el frontend
       const productos =
         data?.map((p) => ({
           ...p,
-          stock: p.inventario, // inventario → stock
-          imagen_url: p.url_imagen, // url_imagen → imagen_url
+          stock: p.inventario,
+          imagen_url: p.url_imagen,
         })) || [];
 
       return { success: true, productos };
@@ -107,7 +105,6 @@ export const adminService = {
   },
 
   // ============ CATEGORÍAS ============
-
   async createCategory(categoryData) {
     try {
       const { data, error } = await supabase
@@ -172,15 +169,20 @@ export const adminService = {
   },
 
   // ============ ÓRDENES ============
-
   async getAllOrders() {
     try {
       const { data, error } = await supabase
         .from("ordenes")
         .select(
           `
-          *,
+          id,
+          total,
+          estado,
+          fecha_creacion,
+          fecha_modificacion,
+          usuario_id,
           perfiles (
+            id,
             nombre_completo,
             email
           )
@@ -196,39 +198,42 @@ export const adminService = {
     }
   },
 
-  async updateOrderStatus(orderId, status) {
+  async updateOrderStatus(orderId, newStatus) {
     try {
       const { data, error } = await supabase
         .from("ordenes")
-        .update({ estado: status })
+        .update({
+          estado: newStatus,
+          fecha_modificacion: new Date(),
+        })
         .eq("id", orderId)
-        .select()
-        .single();
+        .select();
 
       if (error) throw error;
-      return { success: true, data };
+
+      if (!data) {
+        return { success: false, message: "No se encontró la orden." };
+      }
+
+      return { success: true, orden: data };
     } catch (error) {
-      console.error("Error al actualizar orden:", error);
+      console.error("Error al actualizar el estado de la orden:", error);
       return { success: false, error: error.message };
     }
   },
 
   // ============ ESTADÍSTICAS ============
-
   async getStats() {
     try {
-      // Total de productos activos
       const { count: productosCount } = await supabase
         .from("productos")
         .select("*", { count: "exact", head: true })
         .eq("esta_activo", true);
 
-      // Total de órdenes
       const { count: ordenesCount } = await supabase
         .from("ordenes")
         .select("*", { count: "exact", head: true });
 
-      // Total de ventas
       const { data: ventasData } = await supabase
         .from("ordenes")
         .select("total");
@@ -236,7 +241,6 @@ export const adminService = {
       const totalVentas =
         ventasData?.reduce((sum, orden) => sum + (orden.total || 0), 0) || 0;
 
-      // Total de usuarios
       const { count: usuariosCount } = await supabase
         .from("perfiles")
         .select("*", { count: "exact", head: true });
