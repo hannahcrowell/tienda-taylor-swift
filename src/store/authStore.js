@@ -6,22 +6,33 @@ export const useAuthStore = create((set, get) => ({
   profile: null,
   loading: true,
   error: null,
+  initialized: false, // ← NUEVO
 
   // Inicializar autenticación
   initialize: async () => {
+    // Evitar inicializar múltiples veces
+    if (get().initialized) return; // ← NUEVO
+
     set({ loading: true });
 
-    const { user } = await authService.getCurrentUser();
+    try {
+      const { user } = await authService.getCurrentUser();
 
-    if (user) {
-      const { profile } = await authService.getProfile(user.id);
-      set({ user, profile, loading: false });
-    } else {
-      set({ user: null, profile: null, loading: false });
+      if (user) {
+        const { profile } = await authService.getProfile(user.id);
+        set({ user, profile, loading: false, initialized: true }); // ← NUEVO
+      } else {
+        set({ user: null, profile: null, loading: false, initialized: true }); // ← NUEVO
+      }
+    } catch (error) {
+      console.error("Error en initialize:", error);
+      set({ user: null, profile: null, loading: false, initialized: true }); // ← NUEVO
     }
 
     // Escuchar cambios de autenticación
     authService.onAuthStateChange(async (event, session) => {
+      console.log("🔄 Auth state changed:", event); // ← NUEVO para debug
+
       if (session?.user) {
         const { profile } = await authService.getProfile(session.user.id);
         set({ user: session.user, profile });
@@ -29,6 +40,29 @@ export const useAuthStore = create((set, get) => ({
         set({ user: null, profile: null });
       }
     });
+  },
+
+  // Iniciar sesión
+  signIn: async (email, password) => {
+    set({ loading: true, error: null });
+    const result = await authService.signIn(email, password);
+
+    if (result.success) {
+      const { profile } = await authService.getProfile(result.data.user.id);
+      set({ user: result.data.user, profile, loading: false });
+      return result;
+    } else {
+      set({ error: result.error, loading: false });
+      return result;
+    }
+  },
+
+  // Login con Google
+  signInWithGoogle: async () => {
+    set({ loading: true, error: null });
+    const result = await authService.signInWithGoogle();
+    set({ loading: false });
+    return result;
   },
 
   // Registrarse
@@ -43,29 +77,6 @@ export const useAuthStore = create((set, get) => ({
       set({ error: result.error, loading: false });
       return result;
     }
-  },
-
-  // Iniciar sesión
-  signIn: async (email, password) => {
-    set({ loading: true, error: null });
-    const result = await authService.signIn(email, password);
-
-    if (result.success) {
-      const { profile } = await authService.getProfile(result.data.user.id);
-      set({ user: result.data.user, profile, loading: false });
-    } else {
-      set({ error: result.error, loading: false });
-    }
-
-    return result;
-  },
-
-  // Login con Google
-  signInWithGoogle: async () => {
-    set({ loading: true, error: null });
-    const result = await authService.signInWithGoogle();
-    set({ loading: false });
-    return result;
   },
 
   // Cerrar sesión

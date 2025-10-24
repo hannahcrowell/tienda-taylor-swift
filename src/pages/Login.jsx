@@ -24,7 +24,10 @@ export default function Login() {
     const result = await signIn(email, password);
 
     if (result.success) {
-      navigate("/");
+      // Esperar un poco antes de redirigir
+      setTimeout(() => {
+        window.location.href = "/"; // ← Usar window.location en vez de navigate
+      }, 100);
     } else {
       setError(result.error);
     }
