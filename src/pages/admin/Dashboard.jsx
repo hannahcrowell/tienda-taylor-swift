@@ -15,12 +15,18 @@ export default function Dashboard() {
   }, []);
 
   const loadStats = async () => {
+    console.log("🔄 Dashboard: Cargando estadísticas...");
     setIsLoading(true);
+    setError(null);
+
     const result = await adminService.getStats();
+    console.log("📊 Dashboard: Resultado de getStats:", result);
 
     if (result.success) {
+      console.log("✅ Dashboard: Stats cargadas:", result.stats);
       setStats(result.stats);
     } else {
+      console.error("❌ Dashboard: Error al cargar stats:", result.error);
       setError(result.error);
     }
     setIsLoading(false);
@@ -56,11 +62,18 @@ export default function Dashboard() {
     },
   ];
 
+  console.log("🎴 Dashboard: Cards a renderizar:", cards);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-display font-bold text-midnights-purple mb-8">
-        Dashboard de Administración
-      </h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-display font-bold text-midnights-purple">
+          Dashboard de Administración
+        </h1>
+        <button onClick={loadStats} className="btn-secondary text-sm py-2 px-4">
+          🔄 Actualizar
+        </button>
+      </div>
 
       {/* Tarjetas de estadísticas */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

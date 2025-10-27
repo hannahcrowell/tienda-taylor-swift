@@ -68,9 +68,6 @@ export default function OrdersAdmin() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Fecha
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                  Acciones
-                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -102,11 +99,6 @@ export default function OrdersAdmin() {
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">
                     {new Date(orden.fecha_creacion).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4">
-                    <button className="text-blue-600 hover:text-blue-800 text-sm font-semibold">
-                      Ver Detalles
-                    </button>
                   </td>
                 </tr>
               ))}

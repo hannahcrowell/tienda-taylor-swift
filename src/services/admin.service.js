@@ -185,8 +185,7 @@ export const adminService = {
             id,
             nombre_completo,
             email
-          )
-        `
+          )`
         )
         .order("fecha_creacion", { ascending: false });
 
@@ -225,37 +224,60 @@ export const adminService = {
   // ============ ESTADÍSTICAS ============
   async getStats() {
     try {
-      const { count: productosCount } = await supabase
+      console.log("📊 Obteniendo estadísticas...");
+
+      // Total de productos activos
+      const { count: productosCount, error: errorProductos } = await supabase
         .from("productos")
         .select("*", { count: "exact", head: true })
         .eq("esta_activo", true);
 
-      const { count: ordenesCount } = await supabase
+      console.log("📦 Productos activos:", productosCount, errorProductos);
+
+      // Total de órdenes
+      const { count: ordenesCount, error: errorOrdenes } = await supabase
         .from("ordenes")
         .select("*", { count: "exact", head: true });
 
-      const { data: ventasData } = await supabase
+      console.log("🛒 Total órdenes:", ordenesCount, errorOrdenes);
+
+      // Total de ventas
+      const { data: ventasData, error: errorVentas } = await supabase
         .from("ordenes")
         .select("total");
 
-      const totalVentas =
-        ventasData?.reduce((sum, orden) => sum + (orden.total || 0), 0) || 0;
+      console.log("💰 Datos de ventas:", ventasData, errorVentas);
 
-      const { count: usuariosCount } = await supabase
+      const totalVentas =
+        ventasData?.reduce((sum, orden) => {
+          const total = parseFloat(orden.total) || 0;
+          return sum + total;
+        }, 0) || 0;
+
+      console.log("💵 Total ventas calculado:", totalVentas);
+
+      // Total de usuarios
+      const { count: usuariosCount, error: errorUsuarios } = await supabase
         .from("perfiles")
         .select("*", { count: "exact", head: true });
 
+      console.log("👥 Total usuarios:", usuariosCount, errorUsuarios);
+
+      const stats = {
+        productos: productosCount || 0,
+        ordenes: ordenesCount || 0,
+        ventas: totalVentas,
+        usuarios: usuariosCount || 0,
+      };
+
+      console.log("✅ Estadísticas finales:", stats);
+
       return {
         success: true,
-        stats: {
-          productos: productosCount || 0,
-          ordenes: ordenesCount || 0,
-          ventas: totalVentas,
-          usuarios: usuariosCount || 0,
-        },
+        stats: stats,
       };
     } catch (error) {
-      console.error("Error al obtener estadísticas:", error);
+      console.error("❌ Error al obtener estadísticas:", error);
       return {
         success: false,
         error: error.message,
