@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import Layout from "../components/layout/Layout";
 import ProductList from "../components/products/ProductList";
 import { useProductStore } from "../store/productStore";
+import heroImage from "../assets/taylor4.jpg"; // ← AGREGAR ESTO
 
 export default function Home() {
   const {
@@ -43,7 +44,7 @@ export default function Home() {
       <section
         className="text-white py-20"
         style={{
-          backgroundImage: "url('/src/assets/taylor4.jpg')",
+          backgroundImage: `url(${heroImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "scroll",
