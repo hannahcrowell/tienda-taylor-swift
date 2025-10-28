@@ -121,4 +121,5 @@ tienda-taylor-swift/
   <li>Ver todas las órdenes</li>
   <li>Cambiar estado de órdenes</li>
 </ul>
-
+<h2>Diagrama de la Base de Datos</h2>
+<img src="https://i.postimg.cc/6QxpDnkx/Diagrama.png" alt="Diagrama de la aplicación" style="max-width:100%; height:auto;">
