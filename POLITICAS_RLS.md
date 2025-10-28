@@ -1,4 +1,4 @@
-<h2>📜 Políticas Implementadas</h2>
+<h2>Políticas Implementadas</h2>
 
 <h3>1. Perfiles</h3>
 <p><strong>Problema que resuelve:</strong> Evitar que los usuarios vean información de otros usuarios.</p>
@@ -132,7 +132,7 @@
   <li>Crear políticas para órdenes.</li>
 </ol>
 
-<h2>✅ Pruebas que hice</h2>
+<h2>Pruebas que hice</h2>
 <p><strong>Como usuario normal:</strong></p>
 <ul>
   <li>Intenté ver productos de otros usuarios → Bloqueado </li>
