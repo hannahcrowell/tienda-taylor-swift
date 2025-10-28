@@ -1,7 +1,7 @@
 <h1>
   Creación de Página de venta de productos para Proyecto de segundo Departamental
 </h1>
-<a href="https://youtu.be/Jr-DZmyDCKA">Video de Prueba de la aplicación AQUÍ</a>
+<a href="https://youtu.be/TqlUnMrGXYE">Video de Prueba de la aplicación AQUÍ</a>
 <p> Por medio de uno de React y con ayuda de otras herramientas como "VSCode", "SupaBase", "Vercel" y "Github", entre otros para el desarrollo</p>
 <img src="https://i.postimg.cc/pXRM3zB8/Captura-de-pantalla-2025-10-27-193026.png" alt="Captura-de-pantalla-2025-10-27-193026" >
 <pre>
